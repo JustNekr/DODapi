@@ -3,7 +3,7 @@ version: '3.3'
 services:
   web:
     build: .
-    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; alembic upgrade head && uvicorn main:app --host 0.0.0.0'
+    command: bash -c 'for i in {1..10}; do if nc -z postgres 5432; then break; fi; sleep 2; done; alembic upgrade head && uvicorn main:app --host 0.0.0.0'
     ports:
       - 8000:8000
     depends_on:
